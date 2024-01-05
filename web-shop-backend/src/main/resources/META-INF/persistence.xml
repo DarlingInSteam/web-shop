@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+  <persistence-unit name="default">
+    <class>com.shadow_garden.webshopbackend.entity.auth.PasswordResetTokenEntity</class>
+    <class>com.shadow_garden.webshopbackend.entity.auth.RefreshToken</class>
+    <class>com.shadow_garden.webshopbackend.entity.passport.PassportEntity</class>
+    <class>com.shadow_garden.webshopbackend.entity.user.UserEntity</class>
+    <class>com.shadow_garden.webshopbackend.entity.product.ProductEntity</class>
+    <class>com.shadow_garden.webshopbackend.entity.revenue.RevenueEntity</class>
+    <class>com.shadow_garden.webshopbackend.entity.seller.SellerEntity</class>
+    <class>com.shadow_garden.webshopbackend.entity.store.StoreEntity</class>
+    <class>com.shadow_garden.webshopbackend.entity.supplier.SupplierEntity</class>
+    <class>com.shadow_garden.webshopbackend.entity.warehouse.WarehouseEntity</class>
+  </persistence-unit>
+    <persistence-unit name="persistenceUnit"/>
+</persistence>
