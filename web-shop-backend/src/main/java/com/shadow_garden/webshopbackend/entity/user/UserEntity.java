@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,10 +35,9 @@ public class UserEntity implements UserDetails {
 
     @Size(min = 8, message = "{validation.name.size.too_short}")
     @Size(max = 100, message = "{validation.name.size.too_long}")
-    @Column(name = "password_hash")
     private String password;
 
-    @Enumerated(STRING)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)

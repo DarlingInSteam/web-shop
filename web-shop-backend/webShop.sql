@@ -1,8 +1,28 @@
 CREATE TYPE "role" AS ENUM (
-    'NULL',
     'SELLER',
     'MODERATOR',
     'ADMIN'
+    );
+
+CREATE TABLE "users" (
+     "id" SERIAL PRIMARY KEY,
+     "username" VARCHAR(20),
+     "password" VARCHAR(100),
+     "role" role
+);
+
+CREATE TABLE "password_reset_tokens" (
+    "id" BIGSERIAL PRIMARY KEY,
+    "user_id" BIGINT,
+    "token"  varchar(100),
+    "expiry_date" TIMESTAMP WITHOUT TIME ZONE
+);
+
+CREATE TABLE "refresh_tokens" (
+    "id" BIGSERIAL PRIMARY KEY,
+    "user_id" BIGINT,
+    "token" varchar UNIQUE,
+    "expiry_date" TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE "store" (
@@ -18,11 +38,6 @@ CREATE TABLE "seller" (
     "name" TEXT NOT NULL,
     "salary" INT,
     "hire_date" TEXT
-);
-
-CREATE TABLE "sellers_in_store" (
-    "seller_id" INT,
-    "store_id" INT
 );
 
 CREATE TABLE "revenue" (
@@ -62,13 +77,6 @@ CREATE TABLE "warehouse" (
     "quantity_in_stock" INT
 );
 
-CREATE TABLE "users" (
-    "id" SERIAL PRIMARY KEY,
-    "username" TEXT UNIQUE NOT NULL,
-    "password_hash" TEXT NOT NULL,
-    "role" Role
-);
-
 CREATE TABLE "passport" (
     "id" SERIAL PRIMARY KEY,
     "user_id" INT,
@@ -83,10 +91,6 @@ CREATE TABLE "passport" (
 ALTER TABLE "store" ADD FOREIGN KEY ("warehouse_id") REFERENCES "warehouse" ("id");
 
 ALTER TABLE "seller" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
-
-ALTER TABLE "sellers_in_store" ADD FOREIGN KEY ("seller_id") REFERENCES "seller" ("id");
-
-ALTER TABLE "sellers_in_store" ADD FOREIGN KEY ("store_id") REFERENCES "store" ("id");
 
 ALTER TABLE "revenue" ADD FOREIGN KEY ("seller_id") REFERENCES "seller" ("id");
 

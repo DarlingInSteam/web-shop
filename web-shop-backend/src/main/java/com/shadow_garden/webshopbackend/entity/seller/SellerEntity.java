@@ -33,5 +33,10 @@ public class SellerEntity {
     private String hireDate;
 
     @ManyToOne
+    @JoinTable(
+            name = "sellers_in_store",
+            joinColumns = @JoinColumn(name = "seller_id"),
+            inverseJoinColumns = @JoinColumn(name = "store_id")
+    )
     private StoreEntity storeEntity;
 }

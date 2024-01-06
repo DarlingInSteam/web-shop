@@ -25,11 +25,6 @@ public class StoreEntity {
     private WarehouseEntity warehouse;
 
     @OneToMany
-    @JoinTable(
-            name = "sellers_in_store",
-            joinColumns = @JoinColumn(name = "store_id"),
-            inverseJoinColumns = @JoinColumn(name = "seller_id")
-    )
     private Set<SellerEntity> sellerEntities;
 
     @Column(name = "store_name")
