@@ -31,7 +31,7 @@ public class WarehouseController {
         }
     }
 
-    @GetMapping("/all_warehouses/{id}")
+    @GetMapping("/all_warehouses/get")
     public ResponseEntity getWarehouse(@RequestParam long id) {
         try {
             return ResponseEntity.ok(service.getWarehouse(id));

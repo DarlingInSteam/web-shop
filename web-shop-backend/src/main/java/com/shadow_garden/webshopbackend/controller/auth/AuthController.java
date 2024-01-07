@@ -73,7 +73,7 @@ public class AuthController {
                     return AuthenticationResponse
                             .builder()
                             .accessToken(accessToken)
-                            .token(refreshToken)
+                            .refreshToken(refreshToken)
                             .username(refreshTokenRequest.getUsername())
                             .role(userRole.getRole())
                             .build();

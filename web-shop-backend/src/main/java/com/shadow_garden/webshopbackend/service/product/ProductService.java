@@ -105,7 +105,7 @@ public class ProductService {
         var a = repository.findById(id)
                 .orElseThrow(() -> new Exception("Product not found"));
 
-        a.setQuantity_in_stock(stock);
+        a.setQuantity_in_stock(a.getQuantity_in_stock() + stock);
 
         repository.save(a);
 

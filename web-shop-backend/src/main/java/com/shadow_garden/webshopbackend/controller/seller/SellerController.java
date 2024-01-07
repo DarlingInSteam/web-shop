@@ -32,4 +32,22 @@ public class SellerController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/get_seller_by_user")
+    public ResponseEntity getSellerByUser(@RequestParam String username) {
+        try {
+            return ResponseEntity.ok(service.getSellerByUser(username));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/get_store")
+    public ResponseEntity getStore(@RequestParam long id) {
+        try {
+            return ResponseEntity.ok(service.getStoreBySellerId(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

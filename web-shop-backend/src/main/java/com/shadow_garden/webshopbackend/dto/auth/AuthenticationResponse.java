@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AuthenticationResponse {
     private String accessToken;
-    private String token;
+    private String refreshToken;
     private String username;
     private Role role;
 }
