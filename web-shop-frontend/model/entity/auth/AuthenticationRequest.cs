@@ -1,0 +1,24 @@
+﻿using System;
+using Newtonsoft.Json;
+
+namespace web_shop_frontend.model.entity;
+
+public class AuthenticationRequest
+{
+    [JsonProperty("username")]
+    public string Username { get; set; }
+    
+    [JsonProperty("password")]
+    public string Password { get; set; }
+    
+    public AuthenticationRequest(string username, string password)
+    {
+        if (string.IsNullOrEmpty(username))
+            throw new ArgumentException("Username can't be null or empty");
+        if (string.IsNullOrEmpty(password))
+            throw new ArgumentException("Password can't be null or empty");
+        
+        Username = username;
+        Password = password;
+    }
+}
