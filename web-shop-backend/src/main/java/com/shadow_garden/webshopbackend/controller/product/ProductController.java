@@ -42,6 +42,15 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/all")
+    public ResponseEntity getAllProduct() {
+        try {
+            return ResponseEntity.ok(service.getAllProduct());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @PostMapping("/{id}/add_count")
 
     public ResponseEntity addProduct(@PathVariable long id, @RequestParam int stock) {

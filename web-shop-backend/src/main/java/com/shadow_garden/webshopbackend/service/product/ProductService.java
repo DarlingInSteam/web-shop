@@ -15,6 +15,8 @@ import org.aspectj.weaver.bcel.ExceptionRange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProductService {
     @Autowired
@@ -99,6 +101,10 @@ public class ProductService {
         }
 
         return "U can't sell this quantity of products";
+    }
+
+    public List<ProductDto> getAllProduct() {
+        return repository.findAll().stream().map(ProductDto::toDto).toList();
     }
 
     public String addNewStockInProduct(int stock, long id) throws Exception {
