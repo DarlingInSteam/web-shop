@@ -14,6 +14,9 @@ public interface ISellerService
 {
     [Get("/store/revenue")]
     Task<List<Revenue>> GetAllRevenue();
+
+    [Get("/product/all")]
+    Task<List<Product>> GetAllProduct();
     
     [Post("/product/create")]
     Task<string> CreateProduct([Body] CreateProductRequest request);

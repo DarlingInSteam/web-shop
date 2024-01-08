@@ -84,4 +84,10 @@ public class SellerRequest
         var res = await _api.GetAllRevenue();
         return res;
     }
+
+    public async Task<List<Product>> GetAllProduct()
+    {
+        var res = await _api.GetAllProduct();
+        return res;
+    }
 }

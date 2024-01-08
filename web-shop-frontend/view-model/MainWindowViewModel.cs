@@ -31,11 +31,19 @@ public class MainWindowViewModel : ViewModelBase
     private int _quantityInStock;
     private int _price;
     private int _sellProduct;
+    private long _sellerId;
+    private long _storeId;
+    private int _revenueSeller;
+    private int _revenueStore;
     
     public ICommand DeleteProductCommand { get; }
     public ICommand CreateProductCommand { get; }
     public ICommand AddNewCountToProduct { get; }
     public ICommand SellProductButton { get; }
+
+    public ICommand CalculateSeller { get; }
+    public ICommand CalculateStore { get; }
+
 
     public MainWindowViewModel(SecureDataStorage secureDataStorage)
     {
@@ -51,8 +59,11 @@ public class MainWindowViewModel : ViewModelBase
         
         if (VisibilityAdminPanel == true)
         {
+            AddNewCountToProduct = new RelayCommand<object>(AddCount);
+            CalculateSeller = new RelayCommand<object>(CalculatingSeller);
+            CalculateStore = new RelayCommand<object>(CalculatingStore);
+            GetAllProductAdmin();
             GetAllRevenue();
-            var a = "";
         }
         else
         {
@@ -66,6 +77,75 @@ public class MainWindowViewModel : ViewModelBase
         
     }
 
+    private void CalculatingSeller(object r)
+    {
+        int sum = 0;
+        
+        foreach (var revenue in Revenues)
+        {
+            if (revenue.SellerId == SellerId) sum += revenue.RevenueAmount;
+        }
+
+        RevenueSeller = sum;
+    }
+
+    private void CalculatingStore(object r)
+    {
+        int sum = 0;
+
+        foreach (var revenue in Revenues)
+        {
+            if (revenue.StoreId == StoreId) sum += revenue.RevenueAmount;
+        }
+
+        RevenueStore = sum;
+    }
+
+    public int RevenueSeller
+    {
+        get => _revenueSeller;
+
+        set
+        {
+            _revenueSeller = value;
+            
+            OnPropertyChange(nameof(RevenueSeller));
+        }
+    }
+
+    public int RevenueStore
+    {
+        get => _revenueStore;
+
+        set
+        {
+            _revenueStore = value;
+            OnPropertyChange(nameof(RevenueStore));
+        }
+    }
+    
+    public long SellerId
+    {
+        get => _sellerId;
+
+        set
+        {
+            _sellerId = value;
+            OnPropertyChange(nameof(SellerId));
+        }
+    }
+
+    public long StoreId
+    {
+        get => _storeId;
+
+        set
+        {
+            _storeId = value;
+            OnPropertyChange(nameof(StoreId));
+        }
+    }
+    
     public ObservableCollection<Supplier> Suppliers
     {
         get => _suppliers;
@@ -210,6 +290,27 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    private async void GetAllProductAdmin()
+    {
+        try
+        {
+            var req = new SellerRequest(_secureDataStorage);
+            var res = await req.GetAllProduct();
+
+            Products.Clear();
+            
+            foreach (var r in res)
+            {
+                Products.Add(r);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+    
     private async void SellButton(object parameter)
     {
         try
@@ -249,7 +350,8 @@ public class MainWindowViewModel : ViewModelBase
         {
             var req = new SellerRequest(_secureDataStorage);
             var resp = await req.AddCount(_selectedProduct.Id, 100);
-            GetAllProducts();
+            if (_secureDataStorage.Role != Role.ADMIN) GetAllProducts();
+            else GetAllProductAdmin();
         }
         catch (Exception e)
         {

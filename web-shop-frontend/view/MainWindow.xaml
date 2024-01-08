@@ -15,7 +15,6 @@
     <Grid>
         <StackPanel x:Name="myStackPanel">
             <StackPanel Margin="0 15 0 0" Orientation="Horizontal">
-                <Button Command="{Binding AddNewCountToProduct}" HorizontalAlignment="Center" x:Name="AddProductButton" Content = "Добавить количество продукта"></Button>
                 <Button Command="{Binding SellProductButton}" Margin="15 0 0 0" Content="Продать продукт"></Button>
                 <TextBox 
                     Margin="15 0 0 0 "
@@ -101,7 +100,22 @@
         </StackPanel>
         
         <StackPanel x:Name="myStackPanel2">
-            <DataGrid Height="400" VerticalScrollBarVisibility="Visible" AutoGenerateColumns="False" ItemsSource="{Binding Revenues}" SelectedItem="{Binding SelectedProduct}" IsReadOnly="True">
+            <StackPanel HorizontalAlignment="Left">
+                <Button Command="{Binding AddNewCountToProduct}" HorizontalAlignment="Center" Content = "Пополнить продукты"></Button>
+            </StackPanel>
+            
+            <DataGrid Margin="0 15 0 0" Height="400" VerticalScrollBarVisibility="Visible" AutoGenerateColumns="False" ItemsSource="{Binding Products}" SelectedItem="{Binding SelectedProduct}" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Идентификатор" Binding="{Binding Id}" />
+                    <DataGridTextColumn Header="Идентификатор поставщика" Binding="{Binding SupplierId}" />
+                    <DataGridTextColumn Header="Наименование продукта" Binding="{Binding ProductName}" />
+                    <DataGridTextColumn Header="Количество на складе" Binding="{Binding QuantityInStock}" />
+                    <DataGridTextColumn Header="Цена" Binding="{Binding Price}" />
+                    <DataGridTextColumn Header="Идентификатор склада" Binding="{Binding WarehouseId}" />
+                </DataGrid.Columns>
+            </DataGrid>
+            
+            <DataGrid Margin="0 15 0 0" Height="200" VerticalScrollBarVisibility="Visible" AutoGenerateColumns="False" ItemsSource="{Binding Revenues}" SelectedItem="{Binding SelectedProduct}" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Идентификатор" Binding="{Binding Id}" />
                     <DataGridTextColumn Header="Магазин продажи" Binding="{Binding StoreId}" />
@@ -110,6 +124,38 @@
                     <DataGridTextColumn Header="Дата продажи" Binding="{Binding SaleDate}" />
                 </DataGrid.Columns>
             </DataGrid>
+            
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                <TextBlock HorizontalAlignment="Center">Посчитать выручку</TextBlock>
+                <StackPanel Margin = "0 15 0 0" Orientation="Horizontal">
+                    <StackPanel Orientation="Vertical">
+                        <TextBox
+                            materialDesign:HintAssist.HelperText="Продавец"
+                            materialDesign:HintAssist.Hint=""
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            Text="{Binding SellerId}">
+                            
+                        </TextBox>
+                        <TextBlock Margin="0 15 0 0" Text="{Binding RevenueSeller}"></TextBlock>
+                        <Button Margin="0 15 0 0" Content="Посчитать" Command="{Binding CalculateSeller}">
+                            
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Margin="20 0 0 0" Orientation="Vertical">
+                        <TextBox
+                            materialDesign:HintAssist.HelperText="Магазин"
+                            materialDesign:HintAssist.Hint=""
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            Text="{Binding StoreId}">
+                            
+                        </TextBox>
+                        <TextBlock Margin="0 15 0 0" Text="{Binding RevenueStore}"></TextBlock>
+                        <Button Margin="0 15 0 0" Content="Посчитать" Command="{Binding CalculateStore}">
+                            
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>
