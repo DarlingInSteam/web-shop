@@ -2,6 +2,7 @@ package com.shadow_garden.webshopbackend.controller.store;
 
 import com.shadow_garden.webshopbackend.dto.seller.CreateSellerRequest;
 import com.shadow_garden.webshopbackend.dto.store.CreateStoreRequest;
+import com.shadow_garden.webshopbackend.service.RevenueService;
 import com.shadow_garden.webshopbackend.service.store.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,18 @@ import org.springframework.web.bind.annotation.*;
 public class StoreController {
     @Autowired
     private final StoreService service;
+
+    @Autowired
+    private final RevenueService revenueService;
+
+    @GetMapping("/revenue")
+    public ResponseEntity getRevenue() {
+        try {
+            return ResponseEntity.ok(revenueService.getAllRevenue());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     @PostMapping("/create")
     public ResponseEntity createStore(@RequestBody CreateStoreRequest request) {
