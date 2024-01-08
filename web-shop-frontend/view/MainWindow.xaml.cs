@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using web_shop_frontend.data.secure;
+using web_shop_frontend.model.enums;
 using web_shop_frontend.view_model;
 
 namespace web_shop_frontend
@@ -24,6 +25,7 @@ namespace web_shop_frontend
     {
         private SecureDataStorage _secureDataStorage;
         public event EventHandler<Window> WindowRequested;
+        public bool adminPanel;
         
         public MainWindow(SecureDataStorage secureDataStorage)
         {
@@ -31,6 +33,16 @@ namespace web_shop_frontend
             MainWindowViewModel vm = new MainWindowViewModel(_secureDataStorage);
             DataContext = vm;
             InitializeComponent();
+            if (_secureDataStorage.Role == Role.ADMIN)
+            {
+                myStackPanel.Visibility = Visibility.Collapsed;
+                myStackPanel2.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                myStackPanel.Visibility = Visibility.Visible;
+                myStackPanel2.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

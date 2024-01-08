@@ -13,15 +13,19 @@
         Title="Рабочее пространство"
         Height="450" Width="800">
     <Grid>
-        <StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock>Работник:</TextBlock>
-                <TextBlock Margin="10 0 0 0">Пронько Артем </TextBlock>
-            </StackPanel>
-        
+        <StackPanel x:Name="myStackPanel">
             <StackPanel Margin="0 15 0 0" Orientation="Horizontal">
                 <Button Command="{Binding AddNewCountToProduct}" HorizontalAlignment="Center" x:Name="AddProductButton" Content = "Добавить количество продукта"></Button>
-                <Button HorizontalAlignment="Right" x:Name="DeleteProductButton" Content = "Удалить продукт"></Button>
+                <Button Command="{Binding SellProductButton}" Margin="15 0 0 0" Content="Продать продукт"></Button>
+                <TextBox 
+                    Margin="15 0 0 0 "
+                    materialDesign:HintAssist.HelperText="Количество продаваемого продукта"
+                    materialDesign:HintAssist.Hint=""
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    Text="{Binding SellProduct}"
+                    Width="180">
+                    
+                </TextBox>
             </StackPanel>
             
             <StackPanel Margin="0 20 0 0">
@@ -94,6 +98,18 @@
                     x:Name="CreateProductButton" 
                     Content = "Создать продукт"/>
             </StackPanel>
+        </StackPanel>
+        
+        <StackPanel x:Name="myStackPanel2">
+            <DataGrid Height="400" VerticalScrollBarVisibility="Visible" AutoGenerateColumns="False" ItemsSource="{Binding Revenues}" SelectedItem="{Binding SelectedProduct}" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Идентификатор" Binding="{Binding Id}" />
+                    <DataGridTextColumn Header="Магазин продажи" Binding="{Binding StoreId}" />
+                    <DataGridTextColumn Header="Продавец" Binding="{Binding SellerId}" />
+                    <DataGridTextColumn Header="Прибыль с продажи" Binding="{Binding RevenueAmount}" />
+                    <DataGridTextColumn Header="Дата продажи" Binding="{Binding SaleDate}" />
+                </DataGrid.Columns>
+            </DataGrid>
         </StackPanel>
     </Grid>
 </Window>

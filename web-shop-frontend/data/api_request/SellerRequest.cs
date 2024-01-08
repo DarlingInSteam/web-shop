@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using web_shop_frontend.data.client;
 using web_shop_frontend.data.secure;
 using web_shop_frontend.data.service;
+using web_shop_frontend.model.entity;
 using web_shop_frontend.model.entity.product;
 using web_shop_frontend.model.entity.seller;
 using web_shop_frontend.model.entity.store;
@@ -68,5 +69,19 @@ public class SellerRequest
     {
         var a = await _api.CreateProduct(request);
         return a;
+    }
+
+    public async Task<string> SellProduct(SellProductRequest request)
+    {
+        var seller = await GetSellerByUser();
+        request.SellerId = seller.Id;
+        var a = await _api.SellProduct(request);
+        return a;
+    }
+
+    public async Task<List<Revenue>> GetAllRevenue()
+    {
+        var res = await _api.GetAllRevenue();
+        return res;
     }
 }

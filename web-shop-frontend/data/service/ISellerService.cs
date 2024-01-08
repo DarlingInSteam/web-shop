@@ -12,6 +12,9 @@ namespace web_shop_frontend.data.service;
 
 public interface ISellerService
 {
+    [Get("/store/revenue")]
+    Task<List<Revenue>> GetAllRevenue();
+    
     [Post("/product/create")]
     Task<string> CreateProduct([Body] CreateProductRequest request);
 

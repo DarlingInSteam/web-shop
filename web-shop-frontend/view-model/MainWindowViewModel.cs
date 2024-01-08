@@ -5,9 +5,11 @@ using System.Windows.Media;
 using Microsoft.Xaml.Behaviors.Core;
 using web_shop_frontend.data.api_request;
 using web_shop_frontend.data.secure;
+using web_shop_frontend.model.entity;
 using web_shop_frontend.model.entity.product;
 using web_shop_frontend.model.entity.supplier;
 using web_shop_frontend.model.entity.warehouse;
+using web_shop_frontend.model.enums;
 
 namespace web_shop_frontend.view_model;
 
@@ -16,35 +18,52 @@ public class MainWindowViewModel : ViewModelBase
     private ObservableCollection<Product> _products;
     private ObservableCollection<Supplier> _suppliers;
     private ObservableCollection<Warehouse> _warehouses;
+    private ObservableCollection<Revenue> _revenues;
+
     private SecureDataStorage _secureDataStorage;
     private Product _selectedProduct;
     private Supplier _selectedSupplier;
     private Warehouse _selectedWarehouse;
     private int _newCount;
     private bool _newCountVisible;
-    private bool _visabilityAddProduct;
+    private bool _visibilityAdminPanel;
     private string _productName;
     private int _quantityInStock;
     private int _price;
+    private int _sellProduct;
     
     public ICommand DeleteProductCommand { get; }
     public ICommand CreateProductCommand { get; }
     public ICommand AddNewCountToProduct { get; }
+    public ICommand SellProductButton { get; }
 
     public MainWindowViewModel(SecureDataStorage secureDataStorage)
     {
         _products = new ObservableCollection<Product>();
         _suppliers = new ObservableCollection<Supplier>();
         _warehouses = new ObservableCollection<Warehouse>();
+        _revenues = new ObservableCollection<Revenue>();
         _newCountVisible = false;
-        VisabilityAddProduct = false;
         _newCount = 0;
         _secureDataStorage = secureDataStorage;
-        AddNewCountToProduct = new RelayCommand<object>(AddCount);
-        CreateProductCommand = new RelayCommand<object>(ChangeVisability);
-        GetAllProducts();
-        GetAllSuppliers();
-        GetAllWarehouses();
+
+        SetVisibilityBasedOnRole();
+        
+        if (VisibilityAdminPanel == true)
+        {
+            GetAllRevenue();
+            var a = "";
+        }
+        else
+        {
+            AddNewCountToProduct = new RelayCommand<object>(AddCount);
+            CreateProductCommand = new RelayCommand<object>(ChangeVisability);
+            SellProductButton = new RelayCommand<object>(SellButton);
+            GetAllProducts();
+            GetAllSuppliers();
+            GetAllWarehouses();
+        }
+        
     }
 
     public ObservableCollection<Supplier> Suppliers
@@ -91,6 +110,17 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    public string SellProduct
+    {
+        get => _sellProduct.ToString();
+
+        set
+        {
+            _sellProduct = Convert.ToInt32(value);
+            OnPropertyChange(SellProduct);
+        }
+    }
+    
     public string QuantityInStock
     {
         get => _quantityInStock.ToString();
@@ -134,18 +164,41 @@ public class MainWindowViewModel : ViewModelBase
             OnPropertyChange(nameof(SelectedWarehouse));
         }
     }
-    
-    public bool VisabilityAddProduct
+
+    public ObservableCollection<Revenue> Revenues
     {
-        get => _visabilityAddProduct;
+        get => _revenues;
 
         set
         {
-            _visabilityAddProduct = value;
-            OnPropertyChange(nameof(VisabilityAddProduct));
+            _revenues = value;
+            OnPropertyChange(nameof(Revenues));
+        }
+    }
+    
+    public bool VisibilityAdminPanel
+    {
+        get => _visibilityAdminPanel;
+
+        set
+        {
+            _visibilityAdminPanel = value;
+            OnPropertyChange(nameof(VisibilityAdminPanel));
         }
     }
 
+    private void SetVisibilityBasedOnRole()
+    {
+        if (_secureDataStorage.Role == Role.ADMIN)
+        {
+            VisibilityAdminPanel = true;
+        }
+        else
+        {
+            VisibilityAdminPanel = false;
+        }
+    }
+    
     public Product SelectedProduct
     {
         get => _selectedProduct;
@@ -157,6 +210,22 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    private async void SellButton(object parameter)
+    {
+        try
+        {
+            var req = new SellerRequest(_secureDataStorage);
+            var resp = await req.SellProduct(new SellProductRequest(_selectedProduct.Id, 0, _sellProduct));
+            
+            GetAllProducts();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+    
     private async void ChangeVisability(object parameter)
     {
         try
@@ -189,6 +258,25 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    private async void GetAllRevenue()
+    {
+        try
+        {
+            var req = new SellerRequest(_secureDataStorage);
+            var res = await req.GetAllRevenue();
+
+            foreach (var r in res)
+            {
+                Revenues.Add(r);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+    
     private async void GetAllWarehouses()
     {
         try
